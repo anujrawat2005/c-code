@@ -1,0 +1,46 @@
+#include <iostream>
+#include<queue>
+using namespace std;
+
+
+
+
+void interleavequeue(queue<int> &first){
+    queue<int> second;
+    int size = first.size();
+    for(int i = 0;i<size/2;i++){
+        int temp = first.front();
+        first.pop();
+        second.push(temp);
+    }
+    for(int i = 0;i<size/2;i++){
+        int temp = second.front();
+        second.pop();
+        first.push(temp);
+        temp = first.front();
+        first.pop();
+        first.push(temp);
+    }
+}
+
+
+
+int main() {
+  
+  queue<int> q;
+  q.push(89);
+  q.push(12);
+  q.push(13);
+  q.push(14);
+  q.push(15);
+  q.push(18);
+  
+  interleavequeue(q);
+  while(!q.empty()){
+      int element = q.front();
+      q.pop();
+      cout<<element<<" ";
+  }
+
+    return 0;
+}
