@@ -1,0 +1,183 @@
+#include <iostream>
+#include<queue>
+#include<map>
+using namespace std;
+
+
+class Node{
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int val){
+        this->data = val;
+        this->left = NULL;
+        this->right = NULL;
+    }
+};
+
+Node* createtree(){
+    cout<<"enter the value for node:"<<endl;
+    int data;
+    cin>>data;
+    if(data==-1){
+        return NULL;
+    }
+    Node* root = new Node(data);
+    root->left = createtree();
+    root->right = createtree();
+    return root;
+}
+void levelorder(Node* root){
+    queue<Node*> q;
+    q.push(root);
+    q.push(NULL);
+    cout<<endl;
+    while(q.size()>1){
+        Node* front = q.front();
+        q.pop();
+        if(front==NULL){
+            cout<<endl;
+            q.push(NULL);
+        }
+        else{
+            cout<<front->data<<" ";
+            if(front->left!=NULL){
+                q.push(front->left);
+            }
+            if(front->right!=NULL){
+                q.push(front->right);
+            }
+        }
+    }
+}
+
+void printbottomview(Node* root){
+    map<int,int>hdtoNode;
+    queue<pair<Node*,int>>q;
+    q.push(make_pair(root,0));
+    
+    while(!q.empty()){
+        pair<Node*,int>temp = q.front();
+        q.pop();
+        
+        Node* frontNode = temp.first;
+        int hd = temp.second;
+        
+        hdtoNode[hd] = frontNode->data;
+        
+        if(frontNode->left!=NULL){
+            q.push(make_pair(frontNode->left,hd-1));
+        }
+        if(frontNode->right!=NULL){
+            q.push(make_pair(frontNode->right,hd+1));
+        }
+    }
+    cout<<"Printing the bottom"<<endl;
+    for(auto i :hdtoNode){
+        cout<<i.second<<" ";
+    }
+    
+} 
+
+void printleftboundary(Node* root){
+    if(root==NULL){
+        return;
+    }
+    if(root->left==NULL && root->right==NULL){
+        return;
+    }
+    cout<<root->data<<" ";
+    if(root->left!=NULL){
+        printleftboundary(root->left);
+    }
+    else{
+        printleftboundary(root->right);
+    }
+}
+
+void printleafboundary(Node* root){
+    if(root==NULL){
+        return;
+    }
+    if(root->left==NULL && root->right==NULL){
+        cout<<root->data<<" ";
+    }
+    printleafboundary(root->left);
+    printleafboundary(root->right);
+}
+void printrightboundary(Node* root){
+    if(root==NULL){
+        return;
+    }
+    if(root->left==NULL && root->right==NULL){
+        return;
+    }
+    if(root->right!=NULL){
+        printrightboundary(root->right);
+    }
+   else{
+       printrightboundary(root->left);
+   }
+   cout<<root->data<<" ";
+}
+void boundary(Node* root){
+    if(root==NULL){
+        return;
+    }
+    printleftboundary(root);
+    printleafboundary(root);
+    if(root->right!=NULL){
+        printrightboundary(root->right);
+    }
+    else{
+        printrightboundary(root->left);
+    }
+}
+
+
+
+
+
+
+
+int main() {
+    Node* root= createtree();
+    levelorder(root);
+    boundary(root);
+    
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

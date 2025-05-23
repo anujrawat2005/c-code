@@ -1,0 +1,130 @@
+#include <iostream>
+#include<queue>
+#include<map>
+using namespace std;
+
+
+class Node{
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int val){
+        this->data = val;
+        this->left = NULL;
+        this->right = NULL;
+    }
+};
+
+void levelorder(Node* root){
+    queue<Node*> q;
+    q.push(root);
+    q.push(NULL);
+    while(q.size()>1){
+        Node* front = q.front();
+        q.pop();
+        if(front==NULL){
+            cout<<endl;
+            q.push(NULL);
+        }
+        else{
+            cout<<front->data<<" ";
+            if(front->left!=NULL){
+                q.push(front->left);
+            }
+            if(front->right!=NULL){
+                q.push(front->right);
+            }
+        }
+    }
+}
+
+void createmapping(int inorder[],int size,map<int,int> &valuetoindexmap){
+  for(int i =0;i<size;i++){
+      int element  = inorder[i];
+      int index = i;
+      valuetoindexmap[element] = index;
+  }
+}
+
+Node* constructInorderandPreorder(map<int,int> &valuetoindexmap,int preorder[],int inorder[],int &preIndex
+,int inorderStart,int inorderEnd,int size){
+    if(preIndex>=size||inorderStart>inorderEnd){
+        return NULL;
+    }
+    int element = preorder[preIndex];
+    preIndex++;
+    Node* root = new Node(element);
+    
+    int position = valuetoindexmap[element];
+    
+    root->left = constructInorderandPreorder(valuetoindexmap,preorder,inorder,preIndex,
+    inorderStart,position-1,size);
+    root->right = constructInorderandPreorder(valuetoindexmap,preorder,inorder,preIndex,position+1,inorderEnd,size);
+    
+    return root;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int main() {
+    int inorder[6] = {10,8,6,2,4,12};
+    int preorder[6] = {2,8,10,6,4,12};
+    int size = 6;
+    int preorderIndex = 0;
+    int inorderStart = 0;
+    int inorderEnd = size-1;
+    map<int,int>valuetoindexmap;
+    createmapping(inorder,size,valuetoindexmap);
+    Node* root = constructInorderandPreorder(valuetoindexmap,preorder,inorder,preorderIndex
+    ,inorderStart,inorderEnd,size);
+    cout<<"Printing the tree"<<endl;
+    levelorder(root);
+    
+  
+
+    return 0;
+}
+
+
+
+
